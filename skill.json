@@ -2,21 +2,10 @@
   "manifest": {
     "apis": {
       "custom": {
-        "endpoint": {
-          "sourceDir": "lambda/lambda_function.py"
-        },
         "interfaces": []
       }
     },
     "manifestVersion": "1.0",
-    "privacyAndCompliance": {
-      "locales": {
-        "pt-BR": {
-          "privacyPolicyUrl": "",
-          "termsOfUseUrl": ""
-        }
-      }
-    },
     "publishingInformation": {
       "distributionCountries": [],
       "isAvailableWorldwide": true,
