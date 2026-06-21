@@ -1,0 +1,39 @@
+{
+  "manifest": {
+    "apis": {
+      "custom": {
+        "endpoint": {
+          "sourceDir": "lambda/lambda_function.py"
+        },
+        "interfaces": []
+      }
+    },
+    "manifestVersion": "1.0",
+    "privacyAndCompliance": {
+      "locales": {
+        "pt-BR": {
+          "privacyPolicyUrl": "",
+          "termsOfUseUrl": ""
+        }
+      }
+    },
+    "publishingInformation": {
+      "distributionCountries": [],
+      "isAvailableWorldwide": true,
+      "locales": {
+        "pt-BR": {
+          "name": "geminiChat",
+          "summary": "Assistente inteligente com Gemini",
+          "description": "Skill pessoal que integra com o Google Gemini para conversas por voz.",
+          "examplePhrases": [
+            "Alexa, abrir assistente inteligente",
+            "me conte uma curiosidade",
+            "o que é inteligência artificial"
+          ],
+          "keywords": []
+        }
+      },
+      "testingInstructions": "Abra a skill dizendo 'Alexa, abrir assistente inteligente' e faça perguntas."
+    }
+  }
+}
