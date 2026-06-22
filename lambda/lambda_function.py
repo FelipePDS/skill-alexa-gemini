@@ -59,13 +59,19 @@ def send_to_gemini(handler_input, user_message):
         }
     }
 
-    response = requests.post(
-        API_URL,
-        headers={"Content-Type": "application/json"},
-        json=payload,
-        timeout=15,
-    )
-    response.raise_for_status()
+    import time
+    for attempt in range(3):
+        response = requests.post(
+            API_URL,
+            headers={"Content-Type": "application/json"},
+            json=payload,
+            timeout=15,
+        )
+        if response.status_code == 429 and attempt < 2:
+            time.sleep(2)
+            continue
+        response.raise_for_status()
+        break
 
     response_data = response.json()
     response_text = (
