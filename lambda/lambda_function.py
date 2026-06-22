@@ -2,6 +2,7 @@
 
 import logging
 import os
+from dotenv import load_dotenv
 import requests
 import ask_sdk_core.utils as ask_utils
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -13,6 +14,7 @@ from ask_sdk_model import Response
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+load_dotenv()
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 MODEL = "gemini-2.0-flash"
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={GOOGLE_API_KEY}"
