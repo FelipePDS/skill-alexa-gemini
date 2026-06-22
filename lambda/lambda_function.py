@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-MODEL = "gemini-1.5-flash-latest"
+MODEL = "gemini-1.5-flash-latest:generateContent"
 API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 SYSTEM_INSTRUCTION = (
     "Você é minha assistente de I.A. Responda de forma concisa e clara, "
