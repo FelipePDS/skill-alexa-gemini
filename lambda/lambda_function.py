@@ -16,8 +16,8 @@ logger.setLevel(logging.INFO)
 
 load_dotenv()
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-MODEL = "gemini-2.0-flash"
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent?key={GOOGLE_API_KEY}"
+MODEL = "gemini-3.1-flash-lite"
+API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 SYSTEM_INSTRUCTION = (
     "Você é minha assistente de I.A. Responda de forma concisa e clara, "
     "adequada para ser falada em voz alta pela Alexa. "
@@ -63,7 +63,10 @@ def send_to_gemini(handler_input, user_message):
     for attempt in range(3):
         response = requests.post(
             API_URL,
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "x-goog-api-key": GOOGLE_API_KEY,
+            },
             json=payload,
             timeout=15,
         )
