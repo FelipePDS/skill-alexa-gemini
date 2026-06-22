@@ -2,8 +2,7 @@
 
 import logging
 import os
-from google import genai
-from google.genai import types
+import requests
 import ask_sdk_core.utils as ask_utils
 from ask_sdk_core.skill_builder import SkillBuilder
 from ask_sdk_core.dispatch_components import AbstractRequestHandler
@@ -14,14 +13,14 @@ from ask_sdk_model import Response
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 MODEL = "gemini-2.5-flash"
+API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
 SYSTEM_INSTRUCTION = (
     "Você é minha assistente de I.A. Responda de forma concisa e clara, "
     "adequada para ser falada em voz alta pela Alexa. "
     "Limite suas respostas a no máximo 3 parágrafos curtos."
 )
-
-client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
 
 
 def get_history(handler_input):
@@ -48,16 +47,34 @@ def send_to_gemini(handler_input, user_message):
         "parts": [{"text": user_message}]
     })
 
-    response = client.models.generate_content(
-        model=MODEL,
-        contents=contents,
-        config=types.GenerateContentConfig(
-            system_instruction=SYSTEM_INSTRUCTION,
-            max_output_tokens=300,
-        ),
-    )
+    payload = {
+        "contents": contents,
+        "systemInstruction": {
+            "parts": [{"text": SYSTEM_INSTRUCTION}]
+        },
+        "generationConfig": {
+            "maxOutputTokens": 300
+        }
+    }
 
-    response_text = response.text or "Não consegui gerar uma resposta."
+    response = requests.post(
+        API_URL,
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": GOOGLE_API_KEY,
+        },
+        json=payload,
+        timeout=15,
+    )
+    response.raise_for_status()
+
+    response_data = response.json()
+    response_text = (
+        response_data.get("candidates", [{}])[0]
+        .get("content", {})
+        .get("parts", [{}])[0]
+        .get("text", "Não consegui gerar uma resposta.")
+    )
 
     if len(response_text) > 6000:
         response_text = response_text[:6000] + "... Resposta truncada."
